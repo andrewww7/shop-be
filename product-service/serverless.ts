@@ -4,7 +4,7 @@ import { getProductById, getProductsList } from "@functions/index";
 const serverlessConfiguration: AWS = {
   service: 'product-service',
   frameworkVersion: '3',
-  plugins: ['serverless-esbuild'],
+  plugins: ['serverless-auto-swagger', 'serverless-webpack'],
   provider: {
     name: 'aws',
     region: 'eu-west-1',
@@ -23,17 +23,13 @@ const serverlessConfiguration: AWS = {
     getProductsList,
     getProductById
   },
-  package: { individually: true, include: ['src/assets/**'] },
+  package: { individually: true },
   custom: {
-    esbuild: {
-      bundle: true,
-      minify: false,
-      sourcemap: true,
-      exclude: ['aws-sdk'],
-      target: 'node14',
-      define: { 'require.resolve': undefined },
-      platform: 'node',
-      concurrency: 10,
+      webpack: {
+      webpackConfig: 'webpack.config.js',
+          includeModules: false,
+          packager: 'npm',
+          excludeFiles: 'src/**/*.test.js'
     },
   },
 };

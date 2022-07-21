@@ -1,9 +1,9 @@
 import { middyfy } from '@libs/lambda';
 import products from '../../mocks/products.json'
-import schema from "@functions/getProductById/schema";
-import { EventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { schemaValidator } from "../../validator";
-import { object, string } from "yup";
+import schema from '@functions/getProductById/schema';
+import { EventAPIGatewayProxyEvent } from '@libs/api-gateway';
+import { schemaValidator } from '../../validator';
+import { object, string } from 'yup';
 
 export const getProductByID: EventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const productUUID = event.pathParameters?.productUUID;
