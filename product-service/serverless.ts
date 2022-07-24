@@ -23,16 +23,16 @@ const serverlessConfiguration: AWS = {
     getProductById,
     getProductsList
   },
-  package: { individually: true },
+  package: {individually: true},
   custom: {
     webpack: {
-        webpackConfig: 'webpack.config.js',
-        includeModules: false,
-        packager: 'npm',
-        excludeFiles: 'src/**/*.test.js'
+      webpackConfig: 'webpack.config.js',
+      includeModules: false,
+      packager: 'npm',
+      excludeFiles: 'src/**/*.test.js'
     },
     autoswagger: {
-      title: "AWS Course EPAM - Online Shop",
+      title: 'AWS Course EPAM - Online Shop',
       typefiles: ['./src/types/product.model.ts']
     },
   },

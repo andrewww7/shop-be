@@ -1,5 +1,5 @@
 import { handlerPath } from '../../libs/handler-resolver';
-import * as path from "path";
+import * as path from 'path';
 
 const basePath = handlerPath(path.join(__dirname, '../'));
 
@@ -17,7 +17,7 @@ export default {
             bodyType: 'Products'
           },
           500: {
-            description: "Internal Server Error"
+            description: 'Internal Server Error'
           }
         }
       },
