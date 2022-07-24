@@ -1,8 +1,8 @@
-import { middyfy } from '@libs/lambda';
-import { APIGatewayProxyHandler } from "aws-lambda";
-import products from '../../mocks/products.json'
+import { IProductService } from '../../services/product.service';
 
-const getProductsList: APIGatewayProxyHandler = async () => {
+export const getProductsListHandler = (productService: IProductService) => async () => {
+  const products = productService.getProductsList();
+
   return {
     statusCode: 200,
     headers: {
@@ -12,5 +12,3 @@ const getProductsList: APIGatewayProxyHandler = async () => {
     body: JSON.stringify(products)
   }
 };
-
-export const main = middyfy(getProductsList);

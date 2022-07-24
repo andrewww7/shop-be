@@ -1,14 +1,9 @@
-import { middyfy } from '@libs/lambda';
-import products from '../../mocks/products.json'
-import schema from '@functions/getProductById/schema';
-import { EventAPIGatewayProxyEvent } from '@libs/api-gateway';
-import { schemaValidator } from '../../validator';
-import { object, string } from 'yup';
+import { IProductService } from '../../services/product.service';
 
-export const getProductByID: EventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+export const getProductByIdHandler = (productService: IProductService) => async (event) => {
   const productUUID = event.pathParameters?.productUUID;
 
-  const product = products.find(product => product.id === productUUID);
+  const product = productService.getProductById(productUUID);
 
   if (!product) {
     return {
@@ -26,13 +21,3 @@ export const getProductByID: EventAPIGatewayProxyEvent<typeof schema> = async (e
     body: JSON.stringify(product)
   }
 };
-
-export const main = middyfy(getProductByID);
-
-main.use([
-    schemaValidator({
-      pathParameters: object({
-        productUUID: string().uuid().required()
-      })
-    })
-]);

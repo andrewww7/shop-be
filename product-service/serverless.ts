@@ -1,10 +1,10 @@
 import type { AWS } from '@serverless/typescript';
-import { getProductById, getProductsList } from "@functions/index";
+import { getProductById, getProductsList } from './src/functions/index';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
   frameworkVersion: '3',
-  plugins: ['serverless-auto-swagger', 'serverless-webpack'],
+  plugins: ['serverless-auto-swagger', 'serverless-webpack', 'serverless-offline'],
   provider: {
     name: 'aws',
     region: 'eu-west-1',
@@ -20,16 +20,20 @@ const serverlessConfiguration: AWS = {
     },
   },
   functions: {
-    getProductsList,
-    getProductById
+    getProductById,
+    getProductsList
   },
   package: { individually: true },
   custom: {
-      webpack: {
-      webpackConfig: 'webpack.config.js',
-          includeModules: false,
-          packager: 'npm',
-          excludeFiles: 'src/**/*.test.js'
+    webpack: {
+        webpackConfig: 'webpack.config.js',
+        includeModules: false,
+        packager: 'npm',
+        excludeFiles: 'src/**/*.test.js'
+    },
+    autoswagger: {
+      title: "AWS Course EPAM - Online Shop",
+      typefiles: ['./src/types/product.model.ts']
     },
   },
 };

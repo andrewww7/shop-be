@@ -1,5 +1,4 @@
 const slsw = require('serverless-webpack');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
     target: 'node',
@@ -10,8 +9,7 @@ module.exports = {
         minimize: false,
     },
     resolve: {
-        extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
-        plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.paths.json'})]
+        extensions: ['.ts', '.jsx', '.js', '.json'],
     },
     devtool: 'inline-cheap-module-source-map',
     module: {
