@@ -14,7 +14,7 @@ export default {
         request: {
           parameters: {
             paths: {
-              productId: true
+              productUUID: true
             }
           }
         },

@@ -23,7 +23,7 @@ const serverlessConfiguration: AWS = {
     getProductById,
     getProductsList
   },
-  package: {individually: true},
+  package: { individually: true },
   custom: {
     webpack: {
       webpackConfig: 'webpack.config.js',
