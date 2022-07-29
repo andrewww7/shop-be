@@ -4,17 +4,31 @@ import * as path from 'path';
 const basePath = handlerPath(path.join(__dirname, '../'));
 
 export default {
-  handler: `${basePath}handlers.getProductById`,
+  handler: `${basePath}handlers.createProduct`,
   events: [
     {
       http: {
-        method: 'get',
-        path: 'products/{productUUID}',
+        method: 'post',
+        path: 'products',
         cors: true,
         request: {
-          parameters: {
-            paths: {
-              productUUID: true
+          schemas: {
+            'application/json': {
+              type: 'object',
+              properties: {
+                title: {
+                  type: "string"
+                },
+                description: {
+                  type: "string"
+                },
+                price: {
+                  type: "decimal"
+                },
+                count: {
+                  type: "integer"
+                }
+              },
             }
           }
         },

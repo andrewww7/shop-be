@@ -1,19 +1,30 @@
 import { Product } from '../types/product.model';
-import products from '../mocks/products.json'
+import { randomUUID } from 'crypto'
 
 export interface IProductService {
-  getProductsList(): Product[];
+  getProductsList(): Promise<Product[]>;
 
-  getProductById(productUUID: string): Product;
+  getProductById(productUUID: string): Promise<Product>;
+
+  createProduct(product: Product): Promise<Product>;
 }
 
 export class ProductService implements IProductService {
-  public getProductsList(): Product[] {
-    return products;
+
+  constructor(private readonly productsRepository: IProductService) {}
+
+  public async getProductsList(): Promise<Product[]> {
+    return this.productsRepository.getProductsList();
   }
 
-  public getProductById(productUUID: string): Product {
-    console.log(productUUID)
-    return products.find(product => product.id === productUUID);
+  public async getProductById(productUUID: string): Promise<Product> {
+    return this.productsRepository.getProductById(productUUID);
+  }
+
+  public async createProduct(product: Product): Promise<Product> {
+    return this.productsRepository.createProduct({
+      ...product,
+      id: randomUUID()
+    });
   }
 }

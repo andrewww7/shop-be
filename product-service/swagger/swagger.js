@@ -19,12 +19,6 @@
         ],
         "parameters": [
           {
-            "name": "productId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "productUUID",
             "in": "path",
             "required": true,

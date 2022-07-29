@@ -8,7 +8,7 @@ export const schemaValidator = (schema: {
   const before = async request => {
 
     try {
-      const {body, queryStringParameters, pathParameters} = request.event;
+      const { body, queryStringParameters, pathParameters } = request.event;
 
       if (schema.body) {
         schema.body.validateSync(body)

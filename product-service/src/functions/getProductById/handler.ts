@@ -3,7 +3,7 @@ import { IProductService } from '../../services/product.service';
 export const getProductByIdHandler = (productService: IProductService) => async (event) => {
   const productUUID = event.pathParameters?.productUUID;
 
-  const product = productService.getProductById(productUUID);
+  const product = await productService.getProductById(productUUID);
 
   if (!product) {
     return {
