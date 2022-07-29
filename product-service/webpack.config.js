@@ -1,4 +1,5 @@
 const slsw = require('serverless-webpack');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
     target: 'node',
@@ -8,6 +9,7 @@ module.exports = {
     optimization: {
         minimize: false,
     },
+    externals: [nodeExternals()],
     resolve: {
         extensions: ['.ts', '.jsx', '.js', '.json'],
     },
