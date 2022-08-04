@@ -1,4 +1,6 @@
 import { IProductService } from '../../services/product.service';
+import { middyfy } from '../../libs/lambda';
+import { productService } from '../main';
 
 export const getProductsListHandler = (productService: IProductService) => async () => {
   const products = await productService.getProductsList();
@@ -12,3 +14,5 @@ export const getProductsListHandler = (productService: IProductService) => async
     body: JSON.stringify(products)
   }
 };
+
+export const getProductsList = middyfy(getProductsListHandler(productService));

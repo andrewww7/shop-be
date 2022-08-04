@@ -1,19 +1,16 @@
 import { handlerPath } from '../../libs/handler-resolver';
-import * as path from 'path';
-
-const basePath = handlerPath(path.join(__dirname, '../'));
 
 export default {
-  handler: `${basePath}handlers.createProduct`,
+  handler: `${handlerPath(__dirname)}/handler.createProduct`,
   events: [
     {
       http: {
         method: 'post',
         path: 'products',
         cors: true,
-        request: {
-          schemas: {
-            'application/json': {
+        content: {
+          'application/json': {
+            schema: {
               type: 'object',
               properties: {
                 title: {
@@ -29,8 +26,8 @@ export default {
                   type: "integer"
                 }
               },
-            }
           }
+        },
         },
         responses: {
           200: {
