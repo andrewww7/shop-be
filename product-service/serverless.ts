@@ -1,5 +1,5 @@
 import type { AWS } from '@serverless/typescript';
-import { getProductsList, getProductById, createProduct } from './src/functions';
+import { getProductsList, getProductById, createProduct, catalogBatchProcess } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -19,23 +19,75 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
     },
+
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sns:Publish',
+        Resource: [
+          { Ref : 'CreateProductTopic' },
+        ]
+      },
+    ],
   },
+
   functions: {
     getProductsList,
     getProductById,
-    createProduct
+    createProduct,
+    catalogBatchProcess
   },
-  package: { individually: true },
+  package: { individually: false, excludeDevDependencies: true },
   custom: {
     webpack: {
       webpackConfig: 'webpack.config.js',
-      includeModules: false,
+      includeModules: true,
       packager: 'npm',
       excludeFiles: 'src/**/*.test.js'
     },
     autoswagger: {
       title: 'AWS Course EPAM - Online Shop',
       typefiles: ['./src/types/product.model.ts']
+    },
+  },
+
+  resources: {
+    Resources: {
+      CreateProductTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: 'create-product-topic'
+        }
+      },
+      CreateProductTopicSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          TopicArn: { Ref : 'CreateProductTopic' },
+          Protocol: 'email',
+          Endpoint: 'andrewboxonko@gmail.com'
+        }
+      },
+      CatalogItemsQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: '${self:service}-catalog-items-queue',
+          RedrivePolicy: {
+            deadLetterTargetArn: {
+              'Fn::GetAtt': [
+                'CatalogItemsDLQ',
+                'Arn'
+              ]
+            },
+            maxReceiveCount: 5
+          }
+        }
+      },
+      CatalogItemsDLQ: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: '${self:service}-catalog-items-queue-dl'
+        }
+      }
     },
   },
 };
