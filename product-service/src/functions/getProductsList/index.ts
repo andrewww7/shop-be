@@ -1,10 +1,7 @@
 import { handlerPath } from '../../libs/handler-resolver';
-import * as path from 'path';
-
-const basePath = handlerPath(path.join(__dirname, '../'));
 
 export default {
-  handler: `${basePath}handlers.getProductsList`,
+  handler: `${handlerPath(__dirname)}/handler.getProductsList`,
   events: [
     {
       http: {

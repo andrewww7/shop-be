@@ -1,14 +1,10 @@
 {
-  "name": "product-service",
+  "name": "import-service",
   "version": "1.0.0",
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
   "scripts": {
     "sls:offline": "sls offline",
-    "sls:swagger": "sls generate-swagger",
-    "sls-invoke-local:getAllProducts": "sls invoke local -f getProductsList",
-    "sls-invoke-local:getProductById": "sls invoke local -f getProductById --path src/functions/getProductById/mock.json",
-    "sls-invoke-local:createProduct": "sls invoke local -f createProduct --path src/functions/createProduct/mock.json",
     "test": "jest"
   },
   "engines": {
@@ -17,10 +13,12 @@
   "dependencies": {
     "@middy/core": "^2.5.3",
     "@middy/http-json-body-parser": "^2.5.3",
-    "pg": "^8.7.3",
+    "aws-sdk": "^2.1189.0",
+    "csv-parser": "^3.0.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@aws-sdk/types": "^3.127.0",
     "@babel/core": "^7.18.6",
     "@babel/preset-env": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
@@ -28,14 +26,12 @@
     "@types/aws-lambda": "^8.10.71",
     "@types/jest": "^28.1.4",
     "@types/node": "^14.14.25",
-    "@types/pg": "^8.6.5",
     "babel-jest": "^28.1.3",
-    "esbuild": "^0.14.11",
     "jest": "^28.1.2",
-    "json-schema-to-ts": "^1.5.0",
     "serverless": "^3.0.0",
     "serverless-auto-swagger": "^2.8.2",
     "serverless-dotenv-plugin": "^4.0.1",
+    "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-offline": "^9.0.0",
     "serverless-webpack": "^5.7.1",
     "ts-jest": "^28.0.7",

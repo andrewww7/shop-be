@@ -1,4 +1,8 @@
 import { IProductService } from '../../services/product.service';
+import { middyfy } from '../../libs/lambda';
+import { productService } from '../main';
+import { schemaValidator } from '../../validator';
+import { object, string } from 'yup';
 
 export const getProductByIdHandler = (productService: IProductService) => async (event) => {
   const productUUID = event.pathParameters?.productUUID;
@@ -21,3 +25,13 @@ export const getProductByIdHandler = (productService: IProductService) => async 
     body: JSON.stringify(product)
   }
 };
+
+export const getProductById = middyfy(getProductByIdHandler(productService));
+
+getProductById.use([
+  schemaValidator({
+    pathParameters: object({
+      productUUID: string().uuid().required()
+    })
+  })
+]);
