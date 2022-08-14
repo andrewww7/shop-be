@@ -18,14 +18,14 @@ export const importFileParserHandler = (s3: S3, sqs: SQS) => async (event: S3Eve
       .createReadStream()
       .pipe(csv())
       .on('data', async (product) => {
-        const message = await sqs
+        await sqs
           .sendMessage({
             QueueUrl: awsConfig.sqs_queue_name,
-            MessageBody: product,
+            MessageBody: JSON.stringify(product),
           })
           .promise();
 
-        console.log(`Parsed product message was sent into sqs queue: ${JSON.stringify(message)}`);
+        console.log(`Parsed product message was sent into sqs queue: ${JSON.stringify(product)}`);
 
       })
       .on('error', (error) => {
@@ -50,6 +50,14 @@ export const importFileParserHandler = (s3: S3, sqs: SQS) => async (event: S3Eve
           .promise();
       });
   });
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+  }
 };
 
 export const importFileParser = middyfy(importFileParserHandler(s3, sqs));

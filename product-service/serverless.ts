@@ -1,5 +1,5 @@
 import type { AWS } from '@serverless/typescript';
-import { getProductsList, getProductById, createProduct, catalogBatchProcess } from './src/functions';
+import { getProductsList, getProductById, createProduct, catalogBatchProcess, CatalogBatchProcessRole } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -53,6 +53,7 @@ const serverlessConfiguration: AWS = {
 
   resources: {
     Resources: {
+      CatalogBatchProcessRole,
       CreateProductTopic: {
         Type: 'AWS::SNS::Topic',
         Properties: {

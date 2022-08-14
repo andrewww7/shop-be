@@ -1,5 +1,5 @@
 import type { AWS } from '@serverless/typescript';
-import { importProductFile, importFileParser } from './src/functions';
+import { importProductFile, importFileParser, ImportFileParserRole, ImportProductsFileRole } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -33,35 +33,14 @@ const serverlessConfiguration: AWS = {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
     },
-
-    iamRoleStatements: [
-      {
-        Effect: 'Allow',
-        Action: 's3:ListBucket',
-        Resource: [
-          'arn:aws:s3:::${self:custom.PRODUCTS_BUCKET_NAME}/'
-        ]
-      },
-      {
-        Effect: 'Allow',
-        Action: [
-          's3:*'
-        ],
-        Resource: [
-          'arn:aws:s3:::${self:provider.environment.PRODUCTS_BUCKET_NAME}/*'
-        ]
-      },
-      {
-        Effect: 'Allow',
-        Action: [
-          'sqs:SendMessage'
-        ],
-        Resource: [
-          '!Sub arn:aws:sqs:*:${AWS::AccountId}:${self:custom.productServiceName}-catalog-items-queue'
-        ]
-      },
-    ]
   },
+
+  resources: {
+    Resources: {
+      ImportFileParserRole,
+      ImportProductsFileRole
+    }
+  }
 };
 
 module.exports = serverlessConfiguration;
