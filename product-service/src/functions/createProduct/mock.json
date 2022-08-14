@@ -1,0 +1,11 @@
+{
+  "body": {
+    "title": "GTA V",
+    "description": "GTA V",
+    "price": 25,
+    "count": 3
+  },
+  "pathParameters": {
+    "productUUID": "eabb597d-8977-458a-8434-68bf53a4eea4"
+  }
+}

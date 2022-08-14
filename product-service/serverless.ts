@@ -1,10 +1,11 @@
 import type { AWS } from '@serverless/typescript';
-import { getProductById, getProductsList } from './src/functions/index';
+import { getProductById, getProductsList, createProduct } from './src/functions/index';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
   frameworkVersion: '3',
-  plugins: ['serverless-auto-swagger', 'serverless-webpack', 'serverless-offline'],
+  plugins: ['serverless-auto-swagger', 'serverless-webpack', 'serverless-offline', 'serverless-dotenv-plugin'],
+
   provider: {
     name: 'aws',
     region: 'eu-west-1',
@@ -21,9 +22,10 @@ const serverlessConfiguration: AWS = {
   },
   functions: {
     getProductById,
-    getProductsList
+    getProductsList,
+    createProduct
   },
-  package: {individually: true},
+  package: { individually: true },
   custom: {
     webpack: {
       webpackConfig: 'webpack.config.js',

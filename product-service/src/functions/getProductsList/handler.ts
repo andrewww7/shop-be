@@ -1,7 +1,7 @@
 import { IProductService } from '../../services/product.service';
 
 export const getProductsListHandler = (productService: IProductService) => async () => {
-  const products = productService.getProductsList();
+  const products = await productService.getProductsList();
 
   return {
     statusCode: 200,
