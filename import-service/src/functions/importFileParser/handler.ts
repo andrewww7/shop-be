@@ -1,12 +1,12 @@
 import csv from 'csv-parser';
 import { middyfy } from '../../libs/lambda';
-import { S3 } from 'aws-sdk';
-import { s3 } from '../main';
+import { S3, SQS } from 'aws-sdk';
+import { s3, sqs } from '../main';
 import { S3Event } from 'aws-lambda';
-import { s3Config } from '../../config/s3-bucket.config';
+import { awsConfig } from '../../config/aws.config';
 
-export const importFileParserHandler = (s3: S3) => async (event: S3Event) => {
-  const bucketName = s3Config.products_bucket_name;
+export const importFileParserHandler = (s3: S3, sqs: SQS) => async (event: S3Event) => {
+  const bucketName = awsConfig.products_bucket_name;
 
   const record = event.Records[0];
 
@@ -17,7 +17,17 @@ export const importFileParserHandler = (s3: S3) => async (event: S3Event) => {
       .getObject({ Bucket: bucketName, Key: key })
       .createReadStream()
       .pipe(csv())
-      .on('data', (data) => console.log(`csv file parsed data: ${JSON.stringify(data)}`))
+      .on('data', async (product) => {
+        await sqs
+          .sendMessage({
+            QueueUrl: awsConfig.sqs_queue_name,
+            MessageBody: JSON.stringify(product),
+          })
+          .promise();
+
+        console.log(`Parsed product message was sent into sqs queue: ${JSON.stringify(product)}`);
+
+      })
       .on('error', (error) => {
         console.error(error);
 
@@ -40,6 +50,14 @@ export const importFileParserHandler = (s3: S3) => async (event: S3Event) => {
           .promise();
       });
   });
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+  }
 };
 
-export const importFileParser = middyfy(importFileParserHandler(s3));
+export const importFileParser = middyfy(importFileParserHandler(s3, sqs));

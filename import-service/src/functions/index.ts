@@ -1,2 +1,2 @@
-export { default as importProductFile } from './importProductsFile';
-export { default as importFileParser } from './importFileParser';
+export { default as importProductFile, ImportProductsFileRole } from './importProductsFile';
+export { default as importFileParser, ImportFileParserRole } from './importFileParser';
