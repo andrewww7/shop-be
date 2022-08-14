@@ -23,7 +23,7 @@ export const importProductFileHandler = (s3: S3) => async (event) => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: url
+    body: JSON.stringify(url)
   }
 };
 
