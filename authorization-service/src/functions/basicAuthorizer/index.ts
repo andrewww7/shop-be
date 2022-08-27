@@ -2,20 +2,13 @@ import { handlerPath } from '../../libs/handler-resolver';
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.basicAuthorizer`,
+  role: 'LambdaDataRead',
   events: [
     {
       http: {
-        method: 'post',
+        method: 'get',
         path: 'auth',
         cors: true,
-        request: {
-          schemas: {
-            'application/json': {
-              type: 'object',
-              properties: {},
-            },
-          },
-        },
       },
     },
   ],

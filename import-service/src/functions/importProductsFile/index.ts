@@ -16,13 +16,11 @@ export default {
             }
           }
         },
+
         authorizer: {
+          arn: 'arn:aws:lambda:${aws:region}:${aws:accountId}:function:authorization-service-dev-basicAuthorizer',
           name: 'basicAuthorizer',
-          arn: {
-            'Fn::GetAtt': [ 'BasicAuthorizerLambdaFunction', 'Arn' ],
-          },
-          identitySource: 'method.request.header.Authorization',
-          type: 'request',
+          type: 'token',
         },
       }
     }

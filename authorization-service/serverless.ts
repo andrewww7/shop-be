@@ -20,13 +20,62 @@ const serverlessConfiguration: AWS = {
   },
 
   resources: {
-    Outputs: {
-      basicAuthorizer: {
-        Value: {
-          'Fn::GetAtt': ['BasicAuthorizerLambdaFunction', 'Arn'],
-        },
-      },
-    },
+    Resources: {
+      LambdaDataRead: {
+        Type: 'AWS::IAM::Role',
+        Properties: {
+          RoleName: '${self:service}-LambdaDataReadRole-${self:provider.region}',
+          AssumeRolePolicyDocument: {
+            Version: '2012-10-17',
+            Statement: [
+              {
+                Effect: 'Allow',
+                Principal: {
+                  Service: 'lambda.amazonaws.com'
+                },
+                Action: 'sts:AssumeRole'
+              }
+            ]
+          },
+          ManagedPolicyArns: [
+            'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+            'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
+          ],
+          Policies: [
+            {
+              PolicyName: "lambdaDataReadPolicy",
+              PolicyDocument: {
+                Version: "2012-10-17",
+                Statement: [
+                  {
+                    Effect: "Allow",
+                    Action: [
+                      "s3:Lis*",
+                      "s3:Get*",
+                      "s3:Put*",
+                      "s3:Del*"
+                    ],
+                    Resource: [
+                      "arn:aws:s3:::*",
+                      "arn:aws:s3:::*/*"
+                    ]
+                  },
+                  {
+                    Effect: "Allow",
+                    Action: [
+                      "sqs:*"
+                    ],
+                    Resource: [
+                      "arn:aws:sqs:*:${aws:accountId}:*"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
   },
 
   functions: { basicAuthorizer },
