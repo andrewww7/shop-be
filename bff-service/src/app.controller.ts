@@ -16,10 +16,12 @@ export class AppController {
     const recipient = originalUrl.split('/')[1];
     const recipientURL = process.env[recipient];
 
-    return recipientURL
-      ? this.appService.redirectRequest(
+    if (recipientURL) {
+      return this.appService.redirectRequest(
         recipientURL, originalUrl, method, query ?? {}, body ?? {}
-      )
-      : new BadGatewayException({ error: 'Cannot process request' });
+      );
+    }
+
+    throw new BadGatewayException({ error: 'Cannot process request' });
   }
 }
