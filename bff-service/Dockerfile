@@ -11,6 +11,6 @@ RUN npm install --only=production
 COPY --from=base /app/dist ./dist
 
 USER node
-EXPOSE 4000
+EXPOSE 3000
 
-ENTRYPOINT [ "node", "dist/main.js" ]
+ENTRYPOINT [ 'node', 'dist/main.js' ]
